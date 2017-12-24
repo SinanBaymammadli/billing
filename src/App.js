@@ -5,6 +5,8 @@ import Input, { InputLabel, InputAdornment } from "material-ui/Input";
 import { FormControl } from "material-ui/Form";
 import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
+import AppBar from "material-ui/AppBar";
+import Toolbar from "material-ui/Toolbar";
 
 import "./App.css";
 
@@ -12,9 +14,10 @@ class App extends Component {
   state = {
     chickenCount: 1000,
     chickenPrice: 2,
-    eggCount: 1000,
+    eggCount: 10000,
     eggPrice: 0.2,
     eggError: 20,
+    chickPrice: 1,
     result: 0
   };
 
@@ -25,22 +28,46 @@ class App extends Component {
   };
 
   submit = () => {
-    const { chickenCount, chickenPrice } = this.state;
+    const {
+      chickenCount,
+      eggCount,
+      eggError,
+      eggPrice,
+      chickenPrice,
+      chickPrice
+    } = this.state;
 
-    const price = chickenCount * chickenPrice;
+    const expans = chickenCount * chickenPrice + eggCount * eggPrice;
+    const income = chickPrice * (eggCount - eggError);
 
     this.setState({
-      result: price
+      result: income - expans
     });
   };
 
   render() {
+    const { result } = this.state;
+    let bg = "white";
+
+    if (result > 0) {
+      bg = "green";
+    } else {
+      bg = "red";
+    }
+
     return (
       <div className="App">
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography type="title" color="inherit">
+              İstehsalat İdarə Sistemi
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Paper className="paper" elevation={4}>
           <div>
             <FormControl className="form-control">
-              <InputLabel htmlFor="chickenCount">Toyuq sayi</InputLabel>
+              <InputLabel htmlFor="chickenCount">Toyuq sayı</InputLabel>
               <Input
                 id="chickenCount"
                 type="number"
@@ -53,7 +80,7 @@ class App extends Component {
             </FormControl>
 
             <FormControl className="form-control">
-              <InputLabel htmlFor="chickenPrice">Toyuq qiymeti</InputLabel>
+              <InputLabel htmlFor="chickenPrice">Toyuq qiyməti</InputLabel>
               <Input
                 id="chickenPrice"
                 type="number"
@@ -67,7 +94,7 @@ class App extends Component {
           </div>
           <div>
             <FormControl className="form-control">
-              <InputLabel htmlFor="eggCount">Yumurta sayi</InputLabel>
+              <InputLabel htmlFor="eggCount">Yumurta sayı</InputLabel>
               <Input
                 id="eggCount"
                 type="number"
@@ -80,7 +107,7 @@ class App extends Component {
             </FormControl>
 
             <FormControl className="form-control">
-              <InputLabel htmlFor="eggPrice">Yumurta qiymeti</InputLabel>
+              <InputLabel htmlFor="eggPrice">Yumurta qiyməti</InputLabel>
               <Input
                 id="eggPrice"
                 type="number"
@@ -95,7 +122,7 @@ class App extends Component {
 
           <div>
             <FormControl fullWidth className="form-control">
-              <InputLabel htmlFor="eggError">Yumurta qiriq</InputLabel>
+              <InputLabel htmlFor="eggError">Yararsız yumurta sayı</InputLabel>
               <Input
                 id="eggError"
                 type="number"
@@ -108,15 +135,35 @@ class App extends Component {
             </FormControl>
           </div>
 
+          <div>
+            <FormControl fullWidth className="form-control">
+              <InputLabel htmlFor="chickPrice">Cücə qiyməti</InputLabel>
+              <Input
+                id="chickPrice"
+                type="number"
+                value={this.state.chickPrice}
+                onChange={this.handleChange}
+                endAdornment={
+                  <InputAdornment position="end">AZN</InputAdornment>
+                }
+              />
+            </FormControl>
+          </div>
+
           <Button raised color="primary" onClick={this.submit}>
             Hesabla
           </Button>
         </Paper>
 
-        <Paper className="paper" elevation={4}>
-          <Typography type="headline" align="center" gutterBottom>
-            Result:
-            <span> {this.state.result}</span>
+        <Paper className={`paper ${bg}`} elevation={4}>
+          <Typography
+            className="white"
+            type="headline"
+            align="center"
+            gutterBottom
+          >
+            Nəticə:
+            <span> {this.state.result} AZN</span>
           </Typography>
         </Paper>
       </div>

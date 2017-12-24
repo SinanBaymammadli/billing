@@ -20,12 +20,12 @@
 }
 
 .green {
-  background-color: green !important;
+  background-color: #4CAF50 !important;
   color: white !important;
 }
 
 .red {
-  background-color: red !important;
+  background-color: #F44336 !important;
   color: white !important;
 }
 
